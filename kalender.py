@@ -24,7 +24,6 @@ def maand_versieren(jaar, maand):
       kalender[2] = ('Februari', range(1, 29 + 1))
 
     dt =  datetime.date(jaar, maand, 1)
-        
     index_start = dt.isoweekday()
     
     dt1 = datetime.date(jaar,maand,max(kalender[maand][1]))
@@ -48,12 +47,12 @@ def maand_versieren(jaar, maand):
     return daglijst
 
 
-def kwartaal_versieren(jaar,start, eind):
+def kwartaal_versieren(jaar,index):
    daglijsten = []
-   for i in range(start,eind):
-       
+   for i in kwartaal[index-1]:
        daglijst = maand_versieren(jaar,i)
        daglijsten.append(daglijst)
+
    return daglijsten   
 
     
@@ -108,16 +107,16 @@ def is_schrikkel(jaar):
 daglijsten = []
 jaar=int(input('Enter Year'))
 
-dl = kwartaal_versieren(jaar,1,4)
+dl = kwartaal_versieren(jaar,1)
 print_kwartaal(dl,jaar,1)
 
-dl = kwartaal_versieren(jaar,4,7)
+dl = kwartaal_versieren(jaar,2)
 print_kwartaal(dl,jaar,2)
 
-dl = kwartaal_versieren(jaar,7,10)
+dl = kwartaal_versieren(jaar,3)
 print_kwartaal(dl,jaar,3)
 
-dl = kwartaal_versieren(jaar,10,13)
+dl = kwartaal_versieren(jaar,4)
 print_kwartaal(dl,jaar,4)
 
 
