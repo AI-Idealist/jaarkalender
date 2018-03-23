@@ -1,5 +1,5 @@
 import datetime
-calender = [('nulmaand', range(1,1)),
+kalender = [('nulmaand', range(1,1)),
             ('Januari', range(1, 31 + 1)),
             ('Februari', range(1, 28 + 1)),
             ('Maart', range(1, 31 + 1)),
@@ -14,63 +14,54 @@ calender = [('nulmaand', range(1,1)),
             ('December', range(1, 31 + 1))]
 
 week = ['wk', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za', 'Zo']
+kwartaal = [range(1,4),range(4,7), range(7,10), range(10,13)]
 
-def maak_maand(jaar, maand):
+def maand_versieren(jaar, maand):
    
     daglijst = []
      
-    if is_leap(jaar):
-        calender[2] = ('Februari', range(1, 29 + 1))
+    if is_schrikkel(jaar):
+      kalender[2] = ('Februari', range(1, 29 + 1))
 
     dt =  datetime.date(jaar, maand, 1)
         
     index_start = dt.isoweekday()
     
-    dt1 = datetime.date(jaar,maand,max(calender[maand][1]))
+    dt1 = datetime.date(jaar,maand,max(kalender[maand][1]))
     dow = dt1.isoweekday()
         
     for i in range (0, index_start-1):
          daglijst.append(' ')
          
-    for i in calender[maand][1]:
+    for i in kalender[maand][1]:
         daglijst.append(i)
 
     for i in range(0, 7-dow):
         daglijst.append(' ')
-
+  
     aantal_weken = len(daglijst)//7
-    for i in range(1, aantal_weken*7, 8):
-        if daglijst[i] == ' ': 
-            j = 0
-            while daglijst[i+j-1] == ' ': #iterate over first zeros of the month to get first real date
-               j += 1
-            dt = datetime.date(jaar,maand,daglijst[i+j-1])   
-        else:
-            dt = datetime.date(jaar,maand,daglijst[i])
-        dow = dt.isocalendar()[1]
-        daglijst.insert(i-1,dow)
-    
+    daglijst.insert(0,dt.isocalendar()[1])
+    for i in range(8, aantal_weken*7, 8):
+        dt = datetime.date(jaar,maand,daglijst[i])
+        daglijst.insert(i,dt.isocalendar()[1])
     
     return daglijst
+
+
+def kwartaal_versieren(jaar,start, eind):
+   daglijsten = []
+   for i in range(start,eind):
+       
+       daglijst = maand_versieren(jaar,i)
+       daglijsten.append(daglijst)
+   return daglijsten   
+
     
 def print_kwartaal(daglijsten,jaar,index):
-
-    if index == 1:
-       start = 1
-       eind = 4
-    elif index == 2:
-       start = 4
-       eind = 7
-    elif index == 3:
-       start = 7
-       eind = 10   
-    elif index == 4:
-       start = 10
-       eind = 13   
-    
+ 
     spatie = " "
-    for i in range(start,eind):
-        print('{0:<25}'.format(calender[i][0]+ " " + str(jaar)), end='')
+    for i in kwartaal[index-1]:
+        print('{0:<25}'.format(kalender[i][0]+ " " + str(jaar)), end='')
     print()    
     
     for i in range(0,3):
@@ -92,31 +83,15 @@ def print_kwartaal(daglijsten,jaar,index):
       print()     
      
          
-def print_week(daglijst, weekregel):
-   start = 0
-   eind = 8
-   
-   if weekregel == 1:
-      start = 8
-      eind = 16
-   elif weekregel == 2:
-      start = 16
-      eind =24
-   elif weekregel == 3:
-      start = 24
-      eind =32
-   elif weekregel == 4:
-      start = 32
-      eind =40
-   elif weekregel == 5:
-      start = 40
-      eind =48  
-   
-   for i in range(start,eind):
+def print_week(daglijst, index):
+   weekregel = [range(0,8), range(8,16),range(16,24), range(24,32), range(32,40),range(40,48)]
+     
+  
+   for i in weekregel[index]:
       print('{0:<3}'.format(daglijst[i]), end='')
 
         
-def is_leap(jaar):
+def is_schrikkel(jaar):
     """Checks if year is a leap year"""
     if jaar % 4 == 0:
         if jaar % 100 == 0:
@@ -130,27 +105,19 @@ def is_leap(jaar):
         return False
 
 
-def maak_kwartaal(jaar,start, eind):
-   daglijsten = []
-   for i in range(start,eind):
-       
-       daglijst = maak_maand(jaar,i)
-       daglijsten.append(daglijst)
-   return daglijsten   
-
 daglijsten = []
 jaar=int(input('Enter Year'))
 
-dl = maak_kwartaal(jaar,1,4)
+dl = kwartaal_versieren(jaar,1,4)
 print_kwartaal(dl,jaar,1)
 
-dl = maak_kwartaal(jaar,4,7)
+dl = kwartaal_versieren(jaar,4,7)
 print_kwartaal(dl,jaar,2)
 
-dl = maak_kwartaal(jaar,7,10)
+dl = kwartaal_versieren(jaar,7,10)
 print_kwartaal(dl,jaar,3)
 
-dl = maak_kwartaal(jaar,10,13)
+dl = kwartaal_versieren(jaar,10,13)
 print_kwartaal(dl,jaar,4)
 
 
