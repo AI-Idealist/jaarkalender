@@ -10,5 +10,7 @@ Overwegingen bij het ontwerp:
 
 3. Het ontwerp is gebaseerd op het decorator-principe. We beginnen met een lijst dagnummers en verrijken die met steeds meer informatie (trailers en weeknummers) zodat de maand uiteindelijk als een vierkant kan worden uitgeprint.
 
+4. datatype is uiteindelijk 2D matrix zodat informatie ook goed te verwerken is via template engines zoals Ninja.
+
 
 
